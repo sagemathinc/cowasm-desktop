@@ -14,7 +14,7 @@ export default async function python() {
   // filesystem
   element.innerText +=
     "\nNative Files:\n" +
-    (await window.electronAPI.pythonRepr("' '.join(os.listdir('/'))")) +
+    (await window.electronAPI.pythonRepr("' '.join(os.listdir('.'))")) +
     "\n";
 
   await window.electronAPI.pythonExec(`
