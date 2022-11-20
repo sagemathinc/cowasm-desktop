@@ -44,6 +44,7 @@ app.on("activate", () => {
     createWindow();
   }
 });
+app.setMaxListeners(100);
 
 ipcMain.handle(
   "python:exec",

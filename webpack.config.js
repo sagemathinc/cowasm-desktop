@@ -17,7 +17,7 @@ const NodePolyfillPlugin = require("node-polyfill-webpack-plugin");
 
 module.exports = {
   mode: process.env.NODE_ENV == "production" ? "production" : "development",
-  entry: "./src/renderer.js",
+  entry: "./src/renderer.ts",
   devtool: "inline-source-map",
   output: {
     filename: "[name].bundle.js",
