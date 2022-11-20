@@ -5,6 +5,8 @@
   "description": "My Electron application description",
   "main": "dist/main/index.js",
   "scripts": {
+    "build": "npx tsc && npx webpack",
+    "clean": "rm -rf dist node_modules out",
     "start": "electron-forge start",
     "package": "electron-forge package",
     "make": "electron-forge make",
