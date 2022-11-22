@@ -8,6 +8,8 @@ This is a simple proof\-of\-concept Electron.js \(electron\-forge\)
 app that runs [Python via ﻿WebAssembly](https://cowasm.org) in a worker in node.js and does some computations and
 also imports pandas and shows versions of installed libraries. That's actually fairly nontrivial. What we haven't done is make a simple terminal using xterm.js yet, integrate with CoCalc, etc.
 
+_**This is very new and doesn't really work yet.**_  
+
 I've tested that the production binaries it produces work on macOS and Windows. Getting this to work on Windows involved fixing some subtle issues with Python and stdin/stdout/stderr and WASI.
 
 ## Development

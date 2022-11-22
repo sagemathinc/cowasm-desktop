@@ -1,5 +1,5 @@
 import { app, BrowserWindow, ipcMain } from "electron";
-import * as python from "./python";
+import getPython, { pythonTerminate } from "./python";
 import { join } from "path";
 
 if (require("electron-squirrel-startup")) {
@@ -12,15 +12,21 @@ declare global {
     electronAPI: {
       pythonExec: (arg: string) => Promise<void>;
       pythonRepr: (arg: string) => Promise<string>;
+      pythonStdin: (data: string) => void;
+      pythonTerminal: () => void;
+      onPythonStdout: (cb: (data: string) => void) => void;
+      onPythonStderr: (cb: (data: string) => void) => void;
     };
   }
 }
 
+let mainWindow: null | BrowserWindow = null;
 const createWindow = () => {
   // Create the browser window.
-  const mainWindow = new BrowserWindow({
+  mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
+    title: "CoWasm Desktop Python Shell",
     webPreferences: {
       preload: join(__dirname, "preload.js"),
     },
@@ -46,14 +52,32 @@ app.on("activate", () => {
 });
 app.setMaxListeners(100);
 
-ipcMain.handle(
-  "python:exec",
-  async (_event, arg: string) => await python.exec(arg)
-);
-ipcMain.handle(
-  "python:repr",
-  async (_event, arg: string) => await python.repr(arg)
-);
+ipcMain.handle("python:exec", async (_event, arg: string) => {
+  const python = await getPython();
+  return await python.exec(arg);
+});
+
+ipcMain.handle("python:repr", async (_event, arg: string) => {
+  const python = await getPython();
+  return await python.repr(arg);
+});
+
+ipcMain.on("python:stdin", async (_event, data) => {
+  const python = await getPython();
+  python.kernel.writeToStdin(data);
+});
+
+ipcMain.on("python:terminal", async (_event) => {
+  const python = await getPython();
+  python.kernel.on("stdout", (data: Buffer) => {
+    mainWindow?.webContents.send("python:stdout", data);
+  });
+  python.kernel.on("stderr", (data: Buffer) => {
+    mainWindow?.webContents.send("python:stderr", data);
+  });
+  await python.terminal();
+  pythonTerminate();
+});
 
 async function main() {
   await app.whenReady();

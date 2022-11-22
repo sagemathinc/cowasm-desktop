@@ -27,7 +27,7 @@ module.exports = {
   plugins: [
     new NodePolyfillPlugin() /* required for python-wasm */,
     new HtmlWebpackPlugin({
-      title: "Web Python Examples",
+      title: "CoWasm Desktop",
     }),
   ],
   module: {
@@ -40,6 +40,10 @@ module.exports = {
         test: /\.tsx?$/,
         use: "ts-loader",
         exclude: /node_modules/,
+      },
+      {
+        test: /\.css$/i,
+        use: ["style-loader", "css-loader"],
       },
     ],
   },

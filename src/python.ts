@@ -1,28 +1,24 @@
 import debug from "debug";
-//import asyncPython, { PythonWasmAsync } from "python-wasm";
 import { asyncPython } from "python-wasm";
-interface PythonWasmAsync {
-  repr: (s: string) => Promise<string>;
-  exec: (s: string) => Promise<void>;
-}
+
+// TODO: will get exported in future version of python-wasm.
+type PythonWasmAsync = Awaited<ReturnType<typeof asyncPython>>;
 
 const log = debug("python");
 
 let python: PythonWasmAsync | null = null;
+
 // todo: reuseInFlight...?
-async function getPython(): Promise<PythonWasmAsync> {
+export default async function getPython() {
   if (python == null) {
-    python = await asyncPython();
+    python = await asyncPython({ noStdio: true });
   }
   return python;
 }
 
-export async function repr(s: string): Promise<string> {
-  const p = await getPython();
-  return await p.repr(s);
-}
-
-export async function exec(s: string): Promise<void> {
-  const p = await getPython();
-  await p.exec(s);
+export function pythonTerminate() {
+  if (python == null) return;
+  const kernel = python.kernel;
+  python = null;
+  kernel.terminate();
 }
