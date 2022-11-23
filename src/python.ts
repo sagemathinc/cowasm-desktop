@@ -11,7 +11,8 @@ let python: PythonWasmAsync | null = null;
 // todo: reuseInFlight...?
 export default async function getPython() {
   if (python == null) {
-    python = await asyncPython({ noStdio: true });
+    // Very important to explicitly set the fs, since that's not the default yet.
+    python = await asyncPython({ noStdio: true, fs: "everything" });
   }
   return python;
 }
