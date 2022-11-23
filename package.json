@@ -37,9 +37,10 @@
   "homepage": "https://github.com/sagemathinc/cowasm-desktop",
   "dependencies": {
     "@types/debug": "^4.1.7",
+    "dash-wasm": "^0.7.1",
     "debug": "^4.3.4",
     "electron-squirrel-startup": "^1.0.0",
-    "python-wasm": "^0.26.0",
+    "python-wasm": "^0.26.1",
     "xterm": "^5.0.0",
     "xterm-addon-web-links": "^0.7.0"
   },

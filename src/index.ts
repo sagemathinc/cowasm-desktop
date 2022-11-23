@@ -24,17 +24,16 @@ let mainWindow: null | BrowserWindow = null;
 const createWindow = () => {
   // Create the browser window.
   mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 1000,
+    height: 800,
     title: "CoWasm Desktop Python Shell",
     webPreferences: {
       preload: join(__dirname, "preload.js"),
     },
   });
 
-  console.log(__dirname);
   mainWindow.loadFile(join(__dirname, "../renderer/index.html"));
-  mainWindow.webContents.openDevTools();
+  // mainWindow.webContents.openDevTools();
 };
 // Quit when all windows are closed, except on macOS. There, it's common
 // for applications and their menu bar to stay active until the user quits
